@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepScan - AI Media Forensics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <div id="risk-alert-banner" class="alert-banner">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>WARNING: HIGH SURVEILLANCE RISK DETECTED</span>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-shield-virus"></i>
+            <span>DeepScan</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#how-it-works">Process</a></li>
+            <li id="nav-detect-tool" style="display: none;"><a href="#detect">Detection</a></li>
+            <li id="nav-ask-ai" style="display: none;"><a href="assistant.html" id="nav-ask-ai-page">Ask AI</a></li>
+            <li><button class="login-btn" id="login-btn">Login</button></li>
+        </ul>
+    </nav>
+
+    <!-- Login/Signup Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <div class="auth-layout">
+                <!-- Branding Left Side -->
+                <div class="auth-left">
+                    <div class="brand-badge"><span class="dot pulse"></span> Secure Gateway</div>
+                    <h2>Welcome to DeepScan</h2>
+                    <p>Authenticate to access the world's most advanced synthetic media detection suite. Your session is protected by military-grade encryption.</p>
+                    <div class="auth-bullet"><i class="fa-solid fa-lock"></i> AES-256 Encryption</div>
+                    <div class="auth-bullet"><i class="fa-solid fa-microchip"></i> GPU-Accelerated Inference</div>
+                    <div class="auth-bullet"><i class="fa-solid fa-fingerprint"></i> Biometric Integrity</div>
+                </div>
+
+                <!-- Forms Right Side -->
+                <div class="auth-right">
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" data-tab="login">Login</button>
+                        <button class="tab-btn" data-tab="signup">Sign Up</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="login-form" class="auth-form active">
+                        <h2>Account Access</h2>
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <input type="email" placeholder="name@company.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Password</label>
+                            <input type="password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="submit-btn">Continue to Secure Portal</button>
+                    </form>
+
+                    <!-- Signup Form -->
+                    <form id="signup-form" class="auth-form">
+                        <h2>Create Account</h2>
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="John Doe">
+                        </div>
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <input type="email" placeholder="name@company.com">
+                        </div>
+                        <div class="input-group">
+                            <label>Password</label>
+                            <input type="password" placeholder="Min. 8 characters">
+                        </div>
+                        <button type="submit" class="submit-btn secondary-auth-btn">Join DeepScan</button>
+                    </form>
+
+                    <!-- Biometric Setup Screen -->
+                    <div id="biometric-setup" class="auth-form" style="text-align: center;">
+                        <h2><i class="fa-solid fa-shield-virus" style="color:var(--accent);"></i> Secure Your Account</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.9rem;">Please register your Face ID and Fingerprint to complete your high-security registration.</p>
+
+                        <div class="bio-scanners-grid">
+                            <!-- Face Scanner -->
+                            <div class="bio-scanner-box">
+                                <div class="face-scanner-circle">
+                                    <video id="setup-webcam" autoplay playsinline muted></video>
+                                    <div class="bio-scan-line" id="face-scan-line"></div>
+                                </div>
+                                <p id="face-status">Waiting for Face</p>
+                            </div>
+
+                            <!-- Fingerprint Scanner -->
+                            <div class="bio-scanner-box">
+                                <div class="fingerprint-box" id="fingerprint-scanner">
+                                    <i class="fa-solid fa-fingerprint"></i>
+                                    <div class="bio-scan-line" id="finger-scan-line"></div>
+                                </div>
+                                <p id="finger-status">Waiting for Fingerprint</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About / Hero Section -->
+    <header id="about" class="hero-section">
+        <div class="matrix-bg"></div>
+        <div class="hero-content reveal">
+            <div class="status-pill"><span class="dot pulse"></span> AI Detection Live</div>
+            <h1>Exposing the Truth Behind the Pixels</h1>
+            <p class="hero-subtitle">
+                A Deepfake is synthetic media where a person in an existing image, audio, or video is replaced with
+                someone else's likeness using Artificial Intelligence.
+            </p>
+            <p class="hero-text">
+                While AI brings amazing creative possibilities, deepfakes can be weaponized to spread misinformation,
+                commit fraud, or damage reputations. Our advanced DeepScan system utilizes state-of-the-art CNNs, LSTMs,
+                and Spectrogram Analysis to analyze spatiotemporal inconsistencies.
+            </p>
+            <div class="hero-buttons">
+                <a href="#detect" class="cta-btn primary">Start Scanning <i class="fa-solid fa-bolt"></i></a>
+                <a href="#how-it-works" class="cta-btn secondary">Learn More <i class="fa-solid fa-circle-play"></i></a>
+            </div>
+        </div>
+        <div class="hero-visual reveal">
+            <div class="radar-pulse"></div>
+            <div class="radar-pulse"></div>
+            <div class="glowing-orb"></div>
+            <i class="fa-solid fa-microchip network-icon"></i>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll to Explore</span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </header>
+
+    <!-- The Problem Section -->
+    <section class="info-section alternate-bg reveal">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-text">
+                    <span class="eyebrow">The Crisis</span>
+                    <h2>The Digital Trust Gap</h2>
+                    <p>In an era where "seeing is believing" no longer holds true, deepfakes pose a significant threat to global security and personal privacy. Synthetic media is becoming indistinguishable from reality.</p>
+                    <ul class="benefit-list">
+                        <li><i class="fa-solid fa-check"></i> Identity Theft Protection</li>
+                        <li><i class="fa-solid fa-check"></i> Misinformation Countermeasures</li>
+                        <li><i class="fa-solid fa-check"></i> Enterprise Security Standards</li>
+                    </ul>
+                </div>
+                <div class="info-visual">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-mask"></i>
+                        <h4>Masking Artifacts</h4>
+                        <p>Identifying subtle facial blending boundaries invisible to the human eye.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-wave-square"></i>
+                        <h4>Signal Noise</h4>
+                        <p>Analyzing GAN-specific frequency signatures in digital files.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Mission Section -->
+    <section class="info-section reveal">
+        <div class="container mission-container">
+            <div class="mission-badge">PROJECT MISSION</div>
+            <h2>Restoring Digital Trust with Neural Intelligence</h2>
+            <p class="mission-text">DeepScan is a state-of-the-art forensic platform designed to combat the rising threat of synthetic media. Built on deep-learning neural architectures, our engine detects pixel-level inconsistencies invisible to the human eye, ensuring the integrity of our digital world.</p>
+        </div>
+    </section>
+
+    <!-- The Digital Trust Gap (Existing but polished) -->
+    <section id="problem" class="info-section alternate-bg reveal">
+        <div class="container">
+            <div class="section-grid">
+                <div class="content-side">
+                    <span class="step-num">01</span>
+                    <h2>The Crisis of Synthetic Media</h2>
+                    <p>In an era of hyper-realistic generative AI, seeing is no longer believing. 85% of deepfakes are used for malicious misinformation. DeepScan closes this gap by providing an automated, GPU-accelerated truth layer.</p>
+                    <div class="stat-bubble">
+                        <div class="bubble-val">90M+</div>
+                        <div class="bubble-label">AI Assets Tracked</div>
+                    </div>
+                </div>
+                <div class="visual-side">
+                    <div class="trust-gap-visual">
+                        <div class="ai-overlay">AI GENERATED</div>
+                        <img src="https://api.placeholder.com/500/300" alt="Synthetic Media Crisis">
+                        <div class="scan-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Neural Architecture Logic (Architecture Deep-Dive) -->
+    <section class="info-section reveal">
+        <div class="container">
+            <div class="section-header">
+                <h2>Forensic Neural Architecture</h2>
+                <p>Our Xception-based deep learning model analyzes 10,000+ spatial-temporal features.</p>
+            </div>
+            <div class="arch-flow">
+                <div class="arch-node">
+                    <i class="fa-solid fa-expand"></i>
+                    <h4>Preprocessing</h4>
+                    <p>Face-target extraction and frequency domain filtering.</p>
+                </div>
+                <div class="arch-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="arch-node active">
+                    <i class="fa-solid fa-brain"></i>
+                    <h4>Xception Backbone</h4>
+                    <p>Depthwise separable convolutions for artifact detection.</p>
+                </div>
+                <div class="arch-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="arch-node">
+                    <i class="fa-solid fa-shield-check"></i>
+                    <h4>Softmax Output</h4>
+                    <p>Proprietary logic for deepfake vs real classification.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Use-Case Grid -->
+    <section class="info-section alternate-bg reveal">
+        <div class="container">
+            <div class="section-header">
+                <h2>Real-World Deployment</h2>
+                <p>DeepScan is utilized by industry leaders across critical sectors.</p>
+            </div>
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <h3>Law Enforcement</h3>
+                    <p>Verifying digital evidence for court proceedings and forensic investigations.</p>
+                </div>
+                <div class="use-case-card">
+                    <i class="fa-solid fa-newspaper"></i>
+                    <h3>Journalism</h3>
+                    <p>Protecting editorial integrity by scanning user-generated content for AI manipulation.</p>
+                </div>
+                <div class="use-case-card">
+                    <i class="fa-solid fa-users-rectangle"></i>
+                    <h3>Social Media</h3>
+                    <p>Real-time moderation to prevent the spread of harmful deepfake disinformation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Forensic Process (Polished) -->
+    <section id="process" class="info-section reveal">
+        <div class="container">
+            <div class="section-header">
+                <h2>How DeepScan Works</h2>
+                <p>Our three-stage forensic pipeline provides the industry's highest detection accuracy.</p>
+            </div>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-circle">01</div>
+                    <div class="step-content">
+                        <h4>Spatial Analysis</h4>
+                        <p>Scanning for blending artifacts, weird lighting, and mismatched pixel density.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-circle">02</div>
+                    <div class="step-content">
+                        <h4>Metabolic Checks</h4>
+                        <p>Monitoring physiological markers like pulse rhythms and eye-blink frequency.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-circle">03</div>
+                    <div class="step-content">
+                        <h4>Blockchain Audit</h4>
+                        <p>Generating cryptographically-signed forensic reports for legal use.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="info-section alternate-bg reveal">
+        <div class="container tech-container">
+            <div class="tech-stack-header">
+                <h2>Modern Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item"><i class="fa-brands fa-python"></i> <span>Python 3.10</span></div>
+                    <div class="tech-item"><i class="fa-solid fa-fire-flame-curved"></i> <span>PyTorch 2.0</span></div>
+                    <div class="tech-item"><i class="fa-solid fa-terminal"></i> <span>FastAPI Backend</span></div>
+                    <div class="tech-item"><i class="fa-solid fa-code"></i> <span>Vanilla JS/CSS</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </section>
+    <!-- Dashboard View (Initially Hidden) -->
+    <main id="dashboard-view" class="dashboard-container" style="display: none;">
+        <!-- Left Sidebar Navigation -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Forensic Hub</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard-home" class="nav-item active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#detect" class="nav-item"><i class="fa-solid fa-microscope"></i> Image Forensics</a>
+                <a href="#my-scans" class="nav-item"><i class="fa-solid fa-history"></i> My Sessions</a>
+                <a href="#analytics" class="nav-item"><i class="fa-solid fa-brain"></i> Neural Logic</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://api.placeholder.com/40/40" alt="Avatar">
+                    <div class="user-info">
+                        <p class="user-name">Professional Admin</p>
+                        <p class="user-role">Forensic Analyst</p>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="location.reload();"><i class="fa-solid fa-power-off"></i> Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="dashboard-main">
+            <header class="dashboard-top-bar">
+                <div class="breadcrumb">Overview / <span>Forensic Dashboard</span></div>
+                <div class="top-bar-actions">
+                    <div class="notification-btn"><i class="fa-solid fa-bell"></i><span class="dot"></span></div>
+                    <button class="primary-btn" onclick="document.getElementById('image-input').click();">
+                        <i class="fa-solid fa-plus"></i> New Scan
+                    </button>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <!-- Dashboard Summary Info -->
+                <div class="dashboard-intro">
+                    <h1>Neural Forensic Engine</h1>
+                    <p>Session Active: <strong>GPU Acceleration Enabled</strong>. Monitoring synthetic patterns across global clusters.</p>
+                </div>
+
+                <!-- Forensic Stats Row -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-microchip"></i></div>
+                        <div class="stat-info">
+                            <h3>142 TFLOPS</h3>
+                            <p>Compute Power</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-shield-virus"></i></div>
+                        <div class="stat-info">
+                            <h3>98.4%</h3>
+                            <p>Mean Accuracy</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-wifi"></i></div>
+                        <div class="stat-info">
+                            <h3>Active</h3>
+                            <p>Backend Status</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detection Tools Grid -->
+                <section class="tools-grid">
+                    <div class="detection-module">
+                        <div class="card upload-card dashboard-card">
+                            <h3><i class="fa-regular fa-image"></i> Media Input</h3>
+                            <div class="drop-zone" id="image-drop-zone">
+                                <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                                <p>Drag & Drop media here<br><span>Browse Terminal</span></p>
+                                <input type="file" id="image-input" accept="image/*" hidden>
+                            </div>
+                            <div class="card-footer">
+                                <button class="action-btn secondary-btn" id="webcam-btn">
+                                    <i class="fa-solid fa-camera"></i> Live Scan
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card result-card dashboard-card" id="image-result" style="display: none;">
+                            <div class="preview-container">
+                                <img id="image-preview" src="" alt="Preview">
+                                <div id="heatmap-overlay" class="heatmap-canvas" style="display: none;"></div>
+                            </div>
+
+                            <div class="loading-state" id="image-loading">
+                                <div class="scanner"></div>
+                                <p>Running Neural Weights...</p>
+                            </div>
+
+                            <div id="image-analysis-details" style="display: none;">
+                                <div class="circular-progress" id="image-progress">
+                                    <span class="progress-value" id="image-confidence">0%</span>
+                                </div>
+                                <h2 class="result-label" id="image-result-label">Analyzed</h2>
+                                
+                                <div class="details-dashboard">
+                                    <div class="detail-item"><span>Status</span> <b>Active</b></div>
+                                    <div class="detail-item"><span>Confidence</span> <b id="detail-confidence">0%</b></div>
+                                    <div class="detail-item"><span>Forensic Type</span> <b>Xception v2</b></div>
+                                    <div id="image-artifacts-row" class="detail-item"><span>Artifacts Found</span> <b id="image-artifacts">Analyzing</b></div>
+                                    <div class="detail-item"><span>Detection Time</span> <b id="image-time">0.00s</b></div>
+                                </div>
+
+                                <div class="forensic-explorer" id="image-metadata">
+                                    <h4>Spectral Metadata</h4>
+                                    <div class="metadata-grid">
+                                        <div class="meta-box"><span>Software:</span> <em id="meta-software">Unknown</em></div>
+                                        <div class="meta-box"><span>Modified:</span> <em id="meta-date">N/A</em></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="result-actions">
+                                    <button class="cta-btn primary report-btn" onclick="generateReport('image')">
+                                        <i class="fa-solid fa-file-pdf"></i> Download Forensic Dossier
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Integrated Right Side AI Panel -->
+        <aside class="dashboard-ai-sidebar">
+            <div class="ai-sidebar-header">
+                <div class="ai-status"><span class="dot pulse"></span> AI Analyst Online</div>
+                <p>Query the neural assistant regarding scan findings.</p>
+            </div>
+            
+            <div class="ai-chat-view" id="dashboard-chat-view">
+                <div class="bot-msg">System initialized. I am your Forensic Assistant. How can I help you?</div>
+            </div>
+
+            <div class="ai-chat-input-area">
+                <input type="text" id="dashboard-chat-input" placeholder="Query Neural Engine...">
+                <button id="dashboard-chat-send"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Legacy Modals -->
+    <div id="webcam-modal" class="modal">
+        <div class="modal-content webcam-modal-content">
+            <span class="close-btn" id="close-webcam">&times;</span>
+            <h2><i class="fa-solid fa-camera"></i> Live Deepfake Scanner</h2>
+            <div class="webcam-container">
+                <video id="webcam-stream" autoplay playsinline></video>
+                <div class="scan-overlay"></div>
+            </div>
+            <div class="webcam-controls">
+                <button id="capture-btn" class="submit-btn"><i class="fa-solid fa-shutter-button"></i> Capture & Analyze</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot launcher for landing page -->
+    <div id="chatbot-launcher" class="chatbot-btn">
+        <i class="fa-solid fa-robot"></i>
+        <span>Forensic AI</span>
+    </div>
+
+    <!-- Legacy Chat Window -->
+    <div id="chat-window" class="chat-window">
+        <div class="chat-header">
+            <div class="chat-avatar"><i class="fa-solid fa-brain"></i></div>
+            <div class="chat-info">
+                <h3>Neural Assistant</h3>
+                <p>Online & Active</p>
+            </div>
+            <button id="close-chat">&times;</button>
+        </div>
+        <div class="chat-container" id="chat-messages">
+            <div class="bot-msg">Welcome to DeepScan. I am your neural assistant. How can I help you?</div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Ask anything...">
+            <button id="send-chat"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+    <!-- jsPDF for Report Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js?v=direct_ai_v2"></script>
+</body>
+
+</html>

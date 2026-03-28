@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepScan AI Assistant - Forensic ChatGPT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --sidebar-bg: #161b22;
+            --accent: #58a6ff;
+            --card-bg: #1b2028;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --border-color: #30363d;
+            --font-family: 'Outfit', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-primary); font-family: var(--font-family); height: 100vh; display: flex; overflow: hidden; }
+
+        /* Sidebar Like ChatGPT */
+        .sidebar { width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 1rem; }
+        .new-chat-btn { border: 1px solid var(--border-color); padding: 0.8rem; border-radius: 6px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s; font-weight: 500; margin-bottom: 2rem;}
+        .new-chat-btn:hover { background: rgba(255,255,255,0.05); }
+
+        .chat-history { flex: 1; overflow-y: auto; }
+        .history-item { padding: 0.8rem; border-radius: 6px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+        .history-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+
+        .sidebar-footer { border-top: 1px solid var(--border-color); padding-top: 1rem; }
+        .back-link { color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+        .back-link:hover { color: var(--accent); }
+
+        /* Main Chat Area */
+        .main-chat { flex: 1; display: flex; flex-direction: column; position: relative; }
+        .chat-scroll { flex: 1; overflow-y: auto; padding: 2rem 5rem; }
+        .chat-inner { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; }
+
+        .message-row { display: flex; gap: 1.5rem; transition: background 0.3s; padding: 1rem; border-radius: 8px; }
+        .message-row.bot { background: rgba(88, 166, 255, 0.03); }
+        .avatar { width: 36px; height: 36px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .avatar.user { background: #5436da; color: #fff; }
+        .avatar.bot { background: #10a37f; color: #fff; }
+        .content { flex: 1; line-height: 1.6; font-size: 1.1rem; }
+
+        /* Input Area at Bottom */
+        .chat-input-container { padding: 2rem 5rem; background: linear-gradient(180deg, transparent, var(--bg-color) 40%); }
+        .input-wrapper { max-width: 800px; margin: 0 auto; position: relative; }
+        textarea {
+            width: 100%; min-height: 52px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 14px 45px 14px 16px; color: #fff; font-family: inherit; font-size: 1.1rem; resize: none; box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        textarea:focus { outline: none; border-color: var(--accent); }
+        .send-btn { position: absolute; bottom: 12px; right: 12px; background: var(--accent); color: #fff; border: none; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; transition: 0.3s;}
+        .send-btn:hover { background: var(--accent-hover); transform: scale(1.05); }
+
+        /* Animation */
+        .typing { font-style: italic; color: var(--text-secondary); font-size: 0.9rem;}
+
+        @media (max-width: 900px) { .sidebar { display: none; } .chat-scroll, .chat-input-container { padding: 1rem; } }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar like ChatGPT -->
+    <div class="sidebar">
+        <div class="new-chat-btn">
+            <i class="fa-solid fa-plus"></i> New Investigation
+        </div>
+        <div class="chat-history">
+            <div class="history-item"><i class="fa-regular fa-message"></i> Deepfake detection steps</div>
+            <div class="history-item"><i class="fa-regular fa-message"></i> Model accuracy FAQ</div>
+            <div class="history-item"><i class="fa-regular fa-message"></i> Audio forensic report</div>
+        </div>
+        <div class="sidebar-footer">
+            <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Return to Main Tool</a>
+        </div>
+    </div>
+
+    <!-- Main Chat Window -->
+    <div class="main-chat">
+        <div class="chat-scroll" id="chat-box">
+            <div class="chat-inner" id="chat-messages">
+                <div class="message-row bot">
+                    <div class="avatar bot"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="content">
+                        <strong>DeepScan Forensic AI</strong><br>
+                        Hello! I am your dedicated Forensic Assistant. I am specialized in Deep Learning architectures and synthetic media identification. How can I assist your investigation today?
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="input-wrapper">
+                <textarea id="prompt-input" placeholder="Send a message..." rows="1"></textarea>
+                <button class="send-btn" id="send-btn"><i class="fa-solid fa-arrow-up"></i></button>
+            </div>
+            <p style="text-align:center; font-size: 0.75rem; color: var(--text-secondary); margin-top: 10px;">DeepScan Forensic AI can make mistakes. Verify important information.</p>
+        </div>
+    </div>
+
+    <script>
+        const chatInput = document.getElementById('prompt-input');
+        const sendBtn = document.getElementById('send-btn');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatBox = document.getElementById('chat-box');
+
+        // GEMINI API KEY INJECTION
+        const GEMINI_API_KEY = "AIzaSyCd_wZpQB-_CqvTyN0Vaz9VZmOEFhDbIgo".trim();
+
+        function addMessage(text, isBot) {
+            const row = document.createElement('div');
+            row.className = `message-row ${isBot ? 'bot' : ''}`;
+            
+            row.innerHTML = `
+                <div class="avatar ${isBot ? 'bot' : 'user'}">
+                    <i class="fa-solid ${isBot ? 'fa-shield-halved' : 'fa-user'}"></i>
+                </div>
+                <div class="content">
+                    <strong>${isBot ? 'DeepScan Forensic AI' : 'Investigator'}</strong><br>
+                    ${text}
+                </div>
+            `;
+            
+            chatMessages.appendChild(row);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return row;
+        }
+
+        const API_BASE = "http://127.0.0.1:8000";
+
+        async function fetchGeminiResponse(userPrompt) {
+            try {
+                const response = await fetch(`${API_BASE}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: userPrompt })
+                });
+                
+                if (!response.ok) throw new Error("Local Chat Hub Offline");
+                const data = await response.json();
+                return data.response;
+            } catch (error) {
+                console.error("Chat Hub Error:", error);
+                return "Connecting to local AI node... Please ensure your python backend is running.";
+            }
+        }
+
+
+        async function handleSend() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            addMessage(text, false);
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+
+            // Floating "Thinking" effect
+            const thinkingRow = addMessage("Analyzing forensic data...", true);
+            thinkingRow.querySelector('.content').classList.add('typing');
+
+            // Call Real AI
+            const aiResponseText = await fetchGeminiResponse(text);
+
+            // Format markdown-like bold text **text** to HTML
+            const formattedResponse = aiResponseText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+
+            thinkingRow.querySelector('.content').classList.remove('typing');
+            thinkingRow.querySelector('.content').innerHTML = `<strong>DeepScan Forensic AI</strong><br><br>${formattedResponse}`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        sendBtn.addEventListener('click', handleSend);
+        chatInput.addEventListener('keypress', (e) => { 
+            if(e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+            }
+        });
+
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    </script>
+</body>
+</html>
